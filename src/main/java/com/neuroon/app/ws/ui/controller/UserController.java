@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.neuroon.app.ws.service.UserService;
 import com.neuroon.app.ws.shared.dto.UserDto;
 import com.neuroon.app.ws.ui.model.request.UserDetailsRequestModelBody;
+import com.neuroon.app.ws.ui.model.response.OperationStatus;
+import com.neuroon.app.ws.ui.model.response.RequestOperaionStatus;
+import com.neuroon.app.ws.ui.model.response.RequestOperationName;
 import com.neuroon.app.ws.ui.model.response.UserRest;
 
 @RestController
@@ -24,8 +27,7 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	@GetMapping(path = "/{id}", 
-			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest getUser(@PathVariable String id) {
 
 		UserRest returnValue = new UserRest();
@@ -36,9 +38,8 @@ public class UserController {
 		return returnValue;
 	}
 
-	@PostMapping(
-			consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
-			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
+			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest createUser(@RequestBody UserDetailsRequestModelBody userDetails) {
 		UserRest returnValue = new UserRest();
 
@@ -51,11 +52,10 @@ public class UserController {
 		return returnValue;
 	}
 
-	@PutMapping(
-			path = "/{id}", 
-			consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE },
-			produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
-	public UserRest updateUser(@RequestBody UserDetailsRequestModelBody userDetails, @PathVariable String id) {
+	@PutMapping(path = "/{id}", consumes = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_XML_VALUE,
+					MediaType.APPLICATION_JSON_VALUE })
+	public UserRest updateUser(@PathVariable String id, @RequestBody UserDetailsRequestModelBody userDetails) {
 		UserRest returnValue = new UserRest();
 
 		UserDto userDto = new UserDto();
@@ -67,8 +67,15 @@ public class UserController {
 		return returnValue;
 	}
 
-	@DeleteMapping
-	public String deleteUser() {
-		return "delete user was called";
+	@DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
+	public OperationStatus deleteUser(@PathVariable String id) {
+
+		OperationStatus returnValue = new OperationStatus();
+		returnValue.setOperationName(RequestOperationName.DELETE.name());
+		
+		userService.deleteUser(id);
+		
+		returnValue.setOperationResult(RequestOperaionStatus.SUCCESS.name());
+		return returnValue;
 	}
 }
