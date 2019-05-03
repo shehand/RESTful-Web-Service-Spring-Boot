@@ -21,7 +21,6 @@ import com.neuroon.app.ws.service.UserService;
 import com.neuroon.app.ws.shared.Utils;
 import com.neuroon.app.ws.shared.dto.UserDto;
 import com.neuroon.app.ws.ui.model.response.ErrorMessages;
-import com.neuroon.app.ws.ui.model.response.UserRest;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -121,20 +120,23 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserDto> getUsers(int page, int limit) {
-		
+
 		List<UserDto> returnValue = new ArrayList<>();
+
+		if (page > 0)
+			page = page - 1;
 		
 		Pageable pageableRequest = PageRequest.of(page, limit);
-		
+
 		Page<UserEntity> usersPage = userRepository.findAll(pageableRequest);
 		List<UserEntity> users = usersPage.getContent();
-		
-		for(UserEntity UserEntity: users) {
+
+		for (UserEntity UserEntity : users) {
 			UserDto userDto = new UserDto();
 			BeanUtils.copyProperties(UserEntity, userDto);
 			returnValue.add(userDto);
 		}
-		
+
 		return returnValue;
 	}
 
