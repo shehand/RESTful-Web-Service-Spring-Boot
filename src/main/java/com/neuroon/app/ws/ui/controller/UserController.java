@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,7 @@ import com.neuroon.app.ws.ui.model.response.OperationStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperaionStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperationName;
 import com.neuroon.app.ws.ui.model.response.UserRest;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @RequestMapping("users") // http://localhost:8080/users
@@ -126,13 +128,23 @@ public class UserController {
 	}
 
 	// http://localhost:8080/users/<user_id>/addresses/<address_id>
-	@GetMapping(path = "/{id}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
+	@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
-	public AddressesRest getUserAddress(@PathVariable String addressId) {
+	public AddressesRest getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
 
 		AddressDto addressDto = addressService.getAddress(addressId);
-		ModelMapper modelMapper = new ModelMapper();
 		
-		return modelMapper.map(addressDto, AddressesRest.class);
+		ModelMapper modelMapper = new ModelMapper();
+		Link addressLink = linkTo(UserController.class).slash(userId).slash("addresses").slash(addressId).withSelfRel();
+		Link userLink = linkTo(UserController.class).slash(userId).withRel("user");
+		Link addressesLink = linkTo(UserController.class).slash(userId).slash("addresses").withRel("addresses");
+		
+		AddressesRest addressRestModel = modelMapper.map(addressDto, AddressesRest.class);
+		
+		addressRestModel.add(addressLink);
+		addressRestModel.add(userLink);
+		addressRestModel.add(addressesLink);
+		
+		return addressRestModel;
 	}
 }
