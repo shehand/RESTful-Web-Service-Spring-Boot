@@ -5,13 +5,16 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.neuroon.app.ws.io.entity.AddressEntity;
 import com.neuroon.app.ws.io.entity.UserEntity;
+import com.neuroon.app.ws.io.repositories.AddressRepository;
 import com.neuroon.app.ws.io.repositories.UserRepository;
 import com.neuroon.app.ws.service.AddressService;
 import com.neuroon.app.ws.shared.dto.AddressDto;
 
+@Service
 public class AddressServiceImlp implements AddressService {
 
 	@Autowired
