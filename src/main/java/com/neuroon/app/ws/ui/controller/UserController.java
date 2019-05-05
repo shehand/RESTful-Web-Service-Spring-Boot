@@ -3,6 +3,8 @@ package com.neuroon.app.ws.ui.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.neuroon.app.ws.service.AddressService;
 import com.neuroon.app.ws.service.UserService;
+import com.neuroon.app.ws.shared.dto.AddressDto;
 import com.neuroon.app.ws.shared.dto.UserDto;
 import com.neuroon.app.ws.ui.model.request.UserDetailsRequestModelBody;
+import com.neuroon.app.ws.ui.model.response.AddressesRest;
 import com.neuroon.app.ws.ui.model.response.OperationStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperaionStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperationName;
@@ -30,6 +35,9 @@ public class UserController {
 
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	AddressService addressService;
 
 	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest getUser(@PathVariable String id) {
@@ -47,11 +55,13 @@ public class UserController {
 	public UserRest createUser(@RequestBody UserDetailsRequestModelBody userDetails) {
 		UserRest returnValue = new UserRest();
 
-		UserDto userDto = new UserDto();
-		BeanUtils.copyProperties(userDetails, userDto);
+//		UserDto userDto = new UserDto();
+//		BeanUtils.copyProperties(userDetails, userDto);
+		ModelMapper modelMapper = new ModelMapper();
+		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 
 		UserDto createUser = userService.createUser(userDto);
-		BeanUtils.copyProperties(createUser, returnValue);
+		returnValue = modelMapper.map(createUser, UserRest.class);
 
 		return returnValue;
 	}
@@ -87,13 +97,29 @@ public class UserController {
 	public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "25") int limit) {
 		List<UserRest> returnValue = new ArrayList<>();
-		
+
 		List<UserDto> users = userService.getUsers(page, limit);
-		
-		for(UserDto userDto: users) {
+
+		for (UserDto userDto : users) {
 			UserRest userModel = new UserRest();
 			BeanUtils.copyProperties(userDto, userModel);
 			returnValue.add(userModel);
+		}
+		return returnValue;
+	}
+
+	// http://localhost:8080/users/<user_id>/addresses/
+	@GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE })
+	public List<AddressesRest> getUserAddresses(@PathVariable String id) {
+
+		List<AddressesRest> returnValue = new ArrayList<>();
+
+		List<AddressDto> addressDto = addressService.getAddresses(id);
+
+		if(addressDto != null && !addressDto.isEmpty()) {
+			java.lang.reflect.Type listMapper = new TypeToken<List<AddressesRest>>() {}.getType();
+			returnValue = new ModelMapper().map(addressDto, listMapper);
 		}
 		return returnValue;
 	}
