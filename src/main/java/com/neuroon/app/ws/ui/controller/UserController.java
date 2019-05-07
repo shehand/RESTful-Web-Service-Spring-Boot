@@ -29,6 +29,10 @@ import com.neuroon.app.ws.ui.model.response.OperationStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperaionStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperationName;
 import com.neuroon.app.ws.ui.model.response.UserRest;
+
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
@@ -95,6 +99,10 @@ public class UserController {
 		return returnValue;
 	}
 
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization", value="Bearer JWT Token", paramType = "header")
+		
+	})
 	@GetMapping(produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
 			@RequestParam(value = "limit", defaultValue = "25") int limit) {
