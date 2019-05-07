@@ -32,6 +32,7 @@ import com.neuroon.app.ws.ui.model.response.UserRest;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
@@ -45,6 +46,8 @@ public class UserController {
 	@Autowired
 	AddressService addressService;
 
+	@ApiOperation(value = "The Get User Details Web Service Endpoint",
+			notes = "This web service endpoint returns the User detials with json array or xml format")
 	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest getUser(@PathVariable String id) {
 
@@ -55,7 +58,9 @@ public class UserController {
 
 		return returnValue;
 	}
-
+	
+	@ApiOperation(value = "The User Registration Web Service Endpoint",
+			notes = "This web service endpoint returns the User detials with json array or xml format when the user is created")
 	@PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest createUser(@RequestBody UserDetailsRequestModelBody userDetails) {
@@ -72,6 +77,8 @@ public class UserController {
 		return returnValue;
 	}
 
+	@ApiOperation(value = "The User Details Update Web Service Endpoint",
+			notes = "This web service endpoint returns the User detials or success message with json array or xml format when the user is updated")
 	@PutMapping(path = "/{id}", consumes = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_XML_VALUE,
 					MediaType.APPLICATION_JSON_VALUE })
@@ -87,6 +94,8 @@ public class UserController {
 		return returnValue;
 	}
 
+	@ApiOperation(value = "The User Deletion Web Service Endpoint",
+			notes = "This web service endpoint returns success token with json array or xml format when the user is deleted")
 	@DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public OperationStatus deleteUser(@PathVariable String id) {
 
@@ -99,6 +108,8 @@ public class UserController {
 		return returnValue;
 	}
 
+	@ApiOperation(value = "The Get Users Web Service Endpoint",
+			notes = "This web service endpoint returns List of User detials with json array or xml format")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="Bearer JWT Token", paramType = "header")
 		
@@ -119,6 +130,8 @@ public class UserController {
 	}
 
 	// http://localhost:8080/users/<user_id>/addresses/
+	@ApiOperation(value = "The Get User Addresses Web Service Endpoint",
+			notes = "This web service endpoint returns List of User Addresses detials with json array or xml format")
 	@GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
 	public List<AddressesRest> getUserAddresses(@PathVariable String id) {
@@ -136,6 +149,8 @@ public class UserController {
 	}
 
 	// http://localhost:8080/users/<user_id>/addresses/<address_id>
+	@ApiOperation(value = "The Get User Addresse Web Service Endpoint",
+			notes = "This web service endpoint returns the User's selected Addresse according to the given address Id detials with json array or xml format")
 	@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
 	public AddressesRest getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
