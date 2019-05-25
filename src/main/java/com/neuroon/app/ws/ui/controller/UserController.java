@@ -20,11 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neuroon.app.ws.service.AddressService;
+import com.neuroon.app.ws.service.ContactService;
 import com.neuroon.app.ws.service.UserService;
 import com.neuroon.app.ws.shared.dto.AddressDto;
+import com.neuroon.app.ws.shared.dto.ContactDto;
 import com.neuroon.app.ws.shared.dto.UserDto;
 import com.neuroon.app.ws.ui.model.request.UserDetailsRequestModelBody;
 import com.neuroon.app.ws.ui.model.response.AddressesRest;
+import com.neuroon.app.ws.ui.model.response.ContactRest;
 import com.neuroon.app.ws.ui.model.response.OperationStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperaionStatus;
 import com.neuroon.app.ws.ui.model.response.RequestOperationName;
@@ -45,6 +48,9 @@ public class UserController {
 
 	@Autowired
 	AddressService addressService;
+	
+	@Autowired
+	ContactService contactService;
 
 	@ApiOperation(value = "The Get User Details Web Service Endpoint",
 			notes = "This web service endpoint returns the User detials with json array or xml format")
@@ -169,5 +175,28 @@ public class UserController {
 		addressRestModel.add(addressesLink);
 		
 		return addressRestModel;
+	}
+	
+	// http://localhost:8080/users/<user_id>/addresses/<address_id>
+		@ApiOperation(value = "The Get User Conatct Web Service Endpoint",
+				notes = "This web service endpoint returns the User's selected contact according to the given contact Id detials with json array or xml format")
+		@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
+				MediaType.APPLICATION_JSON_VALUE })
+	public ContactRest getUserContact(@PathVariable String userId, @PathVariable String contactId) {
+
+		ContactDto contactDto = contactService.getContact(contactId);
+		
+		ModelMapper modelMapper = new ModelMapper();
+		Link addressLink = linkTo(UserController.class).slash(userId).slash("contacts").slash(contactId).withSelfRel();
+		Link userLink = linkTo(UserController.class).slash(userId).withRel("user");
+		Link addressesLink = linkTo(UserController.class).slash(userId).slash("contacts").withRel("contacts");
+		
+		ContactRest contactRestModel = modelMapper.map(contactDto, ContactRest.class);
+		
+		contactRestModel.add(addressLink);
+		contactRestModel.add(userLink);
+		contactRestModel.add(addressesLink);
+		
+		return contactRestModel;
 	}
 }
