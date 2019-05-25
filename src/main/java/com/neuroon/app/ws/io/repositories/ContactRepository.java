@@ -11,5 +11,6 @@ import com.neuroon.app.ws.io.entity.UserEntity;
 public interface ContactRepository extends CrudRepository<AddressEntity, Long>{
 
 	Iterable<ContactEntity> findAllByUserDetails(UserEntity userEntity);
+	AddressEntity findByAddressId(String contactId);
 
 }
