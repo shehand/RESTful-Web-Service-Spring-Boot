@@ -1,8 +1,10 @@
 package com.neuroon.app.ws.ui.model.response;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import com.neuroon.app.ws.shared.dto.UserDto;
 
-public class ContactRest {
+public class ContactRest extends ResourceSupport{
 
 	private String contactId;
 	private String name;
