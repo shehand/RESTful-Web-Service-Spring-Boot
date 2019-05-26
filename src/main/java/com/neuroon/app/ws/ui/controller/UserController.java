@@ -48,12 +48,11 @@ public class UserController {
 
 	@Autowired
 	AddressService addressService;
-	
+
 	@Autowired
 	ContactService contactService;
 
-	@ApiOperation(value = "The Get User Details Web Service Endpoint",
-			notes = "This web service endpoint returns the User detials with json array or xml format")
+	@ApiOperation(value = "The Get User Details Web Service Endpoint", notes = "This web service endpoint returns the User detials with json array or xml format")
 	@GetMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest getUser(@PathVariable String id) {
 
@@ -64,9 +63,8 @@ public class UserController {
 
 		return returnValue;
 	}
-	
-	@ApiOperation(value = "The User Registration Web Service Endpoint",
-			notes = "This web service endpoint returns the User detials with json array or xml format when the user is created")
+
+	@ApiOperation(value = "The User Registration Web Service Endpoint", notes = "This web service endpoint returns the User detials with json array or xml format when the user is created")
 	@PostMapping(consumes = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE }, produces = {
 			MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public UserRest createUser(@RequestBody UserDetailsRequestModelBody userDetails) {
@@ -83,8 +81,7 @@ public class UserController {
 		return returnValue;
 	}
 
-	@ApiOperation(value = "The User Details Update Web Service Endpoint",
-			notes = "This web service endpoint returns the User detials or success message with json array or xml format when the user is updated")
+	@ApiOperation(value = "The User Details Update Web Service Endpoint", notes = "This web service endpoint returns the User detials or success message with json array or xml format when the user is updated")
 	@PutMapping(path = "/{id}", consumes = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE }, produces = { MediaType.APPLICATION_XML_VALUE,
 					MediaType.APPLICATION_JSON_VALUE })
@@ -100,8 +97,7 @@ public class UserController {
 		return returnValue;
 	}
 
-	@ApiOperation(value = "The User Deletion Web Service Endpoint",
-			notes = "This web service endpoint returns success token with json array or xml format when the user is deleted")
+	@ApiOperation(value = "The User Deletion Web Service Endpoint", notes = "This web service endpoint returns success token with json array or xml format when the user is deleted")
 	@DeleteMapping(path = "/{id}", produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public OperationStatus deleteUser(@PathVariable String id) {
 
@@ -114,11 +110,9 @@ public class UserController {
 		return returnValue;
 	}
 
-	@ApiOperation(value = "The Get Users Web Service Endpoint",
-			notes = "This web service endpoint returns List of User detials with json array or xml format")
-	@ApiImplicitParams({
-		@ApiImplicitParam(name="authorization", value="Bearer JWT Token", paramType = "header")
-		
+	@ApiOperation(value = "The Get Users Web Service Endpoint", notes = "This web service endpoint returns List of User detials with json array or xml format")
+	@ApiImplicitParams({ @ApiImplicitParam(name = "authorization", value = "Bearer JWT Token", paramType = "header")
+
 	})
 	@GetMapping(produces = { MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE })
 	public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0") int page,
@@ -136,8 +130,7 @@ public class UserController {
 	}
 
 	// http://localhost:8080/users/<user_id>/addresses/
-	@ApiOperation(value = "The Get User Addresses Web Service Endpoint",
-			notes = "This web service endpoint returns List of User Addresses detials with json array or xml format")
+	@ApiOperation(value = "The Get User Addresses Web Service Endpoint", notes = "This web service endpoint returns List of User Addresses detials with json array or xml format")
 	@GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
 	public List<AddressesRest> getUserAddresses(@PathVariable String id) {
@@ -155,48 +148,64 @@ public class UserController {
 	}
 
 	// http://localhost:8080/users/<user_id>/addresses/<address_id>
-	@ApiOperation(value = "The Get User Addresse Web Service Endpoint",
-			notes = "This web service endpoint returns the User's selected Addresse according to the given address Id detials with json array or xml format")
+	@ApiOperation(value = "The Get User Addresse Web Service Endpoint", notes = "This web service endpoint returns the User's selected Addresse according to the given address Id detials with json array or xml format")
 	@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
 	public AddressesRest getUserAddress(@PathVariable String userId, @PathVariable String addressId) {
 
 		AddressDto addressDto = addressService.getAddress(addressId);
-		
+
 		ModelMapper modelMapper = new ModelMapper();
 		Link addressLink = linkTo(UserController.class).slash(userId).slash("addresses").slash(addressId).withSelfRel();
 		Link userLink = linkTo(UserController.class).slash(userId).withRel("user");
 		Link addressesLink = linkTo(UserController.class).slash(userId).slash("addresses").withRel("addresses");
-		
+
 		AddressesRest addressRestModel = modelMapper.map(addressDto, AddressesRest.class);
-		
+
 		addressRestModel.add(addressLink);
 		addressRestModel.add(userLink);
 		addressRestModel.add(addressesLink);
-		
+
 		return addressRestModel;
 	}
-	
+
 	// http://localhost:8080/users/<user_id>/addresses/<address_id>
-		@ApiOperation(value = "The Get User Conatct Web Service Endpoint",
-				notes = "This web service endpoint returns the User's selected contact according to the given contact Id detials with json array or xml format")
-		@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
-				MediaType.APPLICATION_JSON_VALUE })
+	@ApiOperation(value = "The Get User Conatct Web Service Endpoint", notes = "This web service endpoint returns the User's selected contact according to the given contact Id detials with json array or xml format")
+	@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE })
 	public ContactRest getUserContact(@PathVariable String userId, @PathVariable String contactId) {
 
 		ContactDto contactDto = contactService.getContact(contactId);
-		
+
 		ModelMapper modelMapper = new ModelMapper();
 		Link addressLink = linkTo(UserController.class).slash(userId).slash("contacts").slash(contactId).withSelfRel();
 		Link userLink = linkTo(UserController.class).slash(userId).withRel("user");
 		Link addressesLink = linkTo(UserController.class).slash(userId).slash("contacts").withRel("contacts");
-		
+
 		ContactRest contactRestModel = modelMapper.map(contactDto, ContactRest.class);
-		
+
 		contactRestModel.add(addressLink);
 		contactRestModel.add(userLink);
 		contactRestModel.add(addressesLink);
-		
+
 		return contactRestModel;
+	}
+
+	// http://localhost:8080/users/<user_id>/addresses/
+	@ApiOperation(value = "The Get User Contacts Web Service Endpoint", notes = "This web service endpoint returns List of User Contacts detials with json array or xml format")
+	@GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_XML_VALUE,
+			MediaType.APPLICATION_JSON_VALUE })
+	public List<ContactRest> getUserContacts(@PathVariable String id) {
+
+		List<ContactRest> returnValue = new ArrayList<>();
+
+		List<ContactDto> contactDto = contactService.getContacts(id);
+
+		if (contactDto != null && !contactDto.isEmpty()) {
+			java.lang.reflect.Type listMapper = new TypeToken<List<AddressesRest>>() {
+			}.getType();
+			returnValue = new ModelMapper().map(contactDto, listMapper);
+		}
+		return returnValue;
 	}
 }
