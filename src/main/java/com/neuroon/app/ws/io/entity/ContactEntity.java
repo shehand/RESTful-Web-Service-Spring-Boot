@@ -29,6 +29,13 @@ public class ContactEntity implements Serializable {
 
 	@Column(nullable = false, length = 120)
 	private String email;
+	
+	@Column(nullable = false)
+	private String contactType;
+
+	@ManyToOne
+	@JoinColumn(name = "users_id")
+	private UserEntity userDetails;
 
 	public long getId() {
 		return id;
@@ -86,11 +93,5 @@ public class ContactEntity implements Serializable {
 		this.userDetails = userDetails;
 	}
 
-	@Column(nullable = false)
-	private String contactType;
-
-	@ManyToOne
-	@JoinColumn(name = "users_id")
-	private UserEntity userDetails;
 
 }
