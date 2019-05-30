@@ -50,7 +50,6 @@ To run the jar file, use the below code.
 
 `java -jar mobile-app-ws-0.0.1-SNAPSHOT.jar`
 
-
 PR's are welcome. Please submit any issue that you will face when 
 developing your spring-boot application.
 
