@@ -1,6 +1,6 @@
 # RESTful web services - Spring Boot
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dbbfcfdb9a104711a3c008f86203f3e8)](https://app.codacy.com/app/shehand/RESTful-Web-Service-Spring-Boot?utm_source=github.com&utm_medium=referral&utm_content=shehand/RESTful-Web-Service-Spring-Boot&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/dbbfcfdb9a104711a3c008f86203f3e8)](https://app.codacy.com/app/shehand/RESTful-Web-Service-Spring-Boot?utm_source=github.com&utm_medium=referral&utm_content=shehand/RESTful-Web-Service-Spring-Boot&utm_campaign=Badge_Grade_Dashboard) [![Build Status](https://travis-ci.org/shehand/RESTful-Web-Service-Spring-Boot.svg?branch=master)](https://travis-ci.org/shehand/RESTful-Web-Service-Spring-Boot)
 
 ## Installation
 
