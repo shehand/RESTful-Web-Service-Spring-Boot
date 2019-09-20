@@ -2,5 +2,8 @@ sudo: required
 
 language: java
 
+before_install:
+ - chmod +x ./mvnw
+
 script: 
-   - chmod +x ./mvnw clean install -B
+   - ./mvnw clean install -B
