@@ -171,7 +171,7 @@ public class UserController {
 
 	// http://localhost:8080/users/<user_id>/addresses/<address_id>
 	@ApiOperation(value = "The Get User Conatct Web Service Endpoint", notes = "This web service endpoint returns the User's selected contact according to the given contact Id detials with json array or xml format")
-	@GetMapping(path = "/{userId}/addresses/{addressId}", produces = { MediaType.APPLICATION_XML_VALUE,
+	@GetMapping(path = "/{userId}/addresses/{contactId}", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
 	public ContactRest getUserContact(@PathVariable String userId, @PathVariable String contactId) {
 
@@ -193,13 +193,13 @@ public class UserController {
 
 	// http://localhost:8080/users/<user_id>/addresses/
 	@ApiOperation(value = "The Get User Contacts Web Service Endpoint", notes = "This web service endpoint returns List of User Contacts detials with json array or xml format")
-	@GetMapping(path = "/{id}/addresses", produces = { MediaType.APPLICATION_XML_VALUE,
+	@GetMapping(path = "/{userId}/addresses", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE })
-	public List<ContactRest> getUserContacts(@PathVariable String id) {
+	public List<ContactRest> getUserContacts(@PathVariable String userId) {
 
 		List<ContactRest> returnValue = new ArrayList<>();
 
-		List<ContactDto> contactDto = contactService.getContacts(id);
+		List<ContactDto> contactDto = contactService.getContacts(userId);
 
 		if (contactDto != null && !contactDto.isEmpty()) {
 			java.lang.reflect.Type listMapper = new TypeToken<List<AddressesRest>>() {

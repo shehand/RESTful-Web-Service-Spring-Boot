@@ -2,12 +2,9 @@ package com.neuroon.app.ws.io.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
+@Entity(name = "posts")
 public class PostEntity implements Serializable{
 	private static final long serialVersionUID = 5986333090901386583L;
 	
